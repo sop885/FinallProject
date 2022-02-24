@@ -1,37 +1,33 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import render from 'dom-serializer';
 import Button from 'react-bootstrap/Button'
 
-const button=(props)=>{
-
 function simulateNetworkRequest() {
-    return new Promise((resolve) => setTimeout(resolve, 2000));
-  }
-  
-  function LoadingButton() {
-    const [isLoading, setLoading] = useState(false);
-  
-    useEffect(() => {
-      if (isLoading) {
-        simulateNetworkRequest().then(() => {
-          setLoading(false);
-        });
-      }
-    }, [isLoading]);
-  
-    const handleClick = () => setLoading(true);
-  
-    return (
-      <Button
-        variant="primary"
-        disabled={isLoading}
-        onClick={!isLoading ? handleClick : null}
-      >
-        {isLoading ? 'הפרטים נשמרים...' : 'שמירת הפרטים'}
-      </Button>
-    );
-  }
-  
-  render(<LoadingButton />);
+  return new Promise((resolve) => setTimeout(resolve, 2000));
 }
-export default button;
+
+export default function LoadingButton() {
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isLoading) {
+      simulateNetworkRequest().then(() => {
+        setLoading(false);
+      });
+    }
+  }, [isLoading]);
+
+  const handleClick = () => setLoading(true);
+ 
+  return (
+    <Button
+      variant="primary"
+      disabled={isLoading}
+      onClick={!isLoading ? handleClick : null}
+    >
+      {isLoading ? 'Loading…' : 'שמור '}
+    </Button>
+  );
+}
+
+render(<LoadingButton />);
