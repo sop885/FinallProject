@@ -1,25 +1,30 @@
-import logo from './logo.svg';
+import React ,{useState} from "react"
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import Header from './components/Header/header';
+import Acoordion from './components/accordion/a';
+import LoadingButton from './components/button/load';
+import Tbl from './components/Table/table';
+import Form from './components/Form.personaldetails/form'
+import FillReq from './components/Form.FillRequest/formFillRequest'
+import DatePicker from "react-datepicker";
 
 function App() {
+
+const [date,setDate] = useState(new Date())
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    {/* <Header></Header> 
+      <br></br>
+     <Acoordion />
+     <LoadingButton />
+     <Tbl></Tbl> 
+     <Form></Form> 
+     <FillReq></FillReq>
+     <DatePicker selected={date} onChange={(date) => setDate(date.target.value)} />     */}
     </div>
   );
 }
 
 export default App;
+ 
