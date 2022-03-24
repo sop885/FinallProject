@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import render from 'dom-serializer';
 import Button from 'react-bootstrap/Button'
+import './load.css'
 
 function simulateNetworkRequest() {
   return new Promise((resolve) => setTimeout(resolve, 2000));
@@ -20,12 +21,12 @@ export default function LoadingButton() {
   const handleClick = () => setLoading(true);
  
   return (
-    <Button
+    <Button 
       variant="primary"
       disabled={isLoading}
       onClick={!isLoading ? handleClick : null}
     >
-      {isLoading ? 'Loading…' : 'שמור '}
+      {isLoading ? 'Loading…' : 'המשך'}
     </Button>
   );
 }
