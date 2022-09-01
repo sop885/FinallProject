@@ -1,0 +1,18 @@
+.myformc{
+    background-color: white;
+    border:solid 0.2px  rgb(180, 179, 179);
+    border-radius: 2%;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.19);
+    width: 60%;
+    float: right;
+    text-align: right;
+    margin-bottom: 5%;
+
+}
+.calender{
+    margin-right: 20%;
+    margin-left: 20%;
+    margin-bottom: 5%;
+   margin-top: 5%;
+
+}
