@@ -10,10 +10,15 @@ import RangeSlider from 'react-bootstrap-range-slider'
 import './formFillRequest.css'
 import validator from 'validator'
 import axios from 'axios';
+import { connect } from 'react-redux'
+function mapStateToProps(state) {
+    return {
+        User: state.users.user
+    }
+}
 
-
-
-const FillReqForm = (props) => {
+const FillReqForm = connect(mapStateToProps)((props) => {
+    const { User } = props;
     const [status, setStatus] = useState('')
     const [image, setImage] = useState({ preview: '', data: '' })
     const [val, setVal] = useState(50)
@@ -46,14 +51,16 @@ const FillReqForm = (props) => {
         status: null,
         CurrentDate: null,
         CurrentTime: null,
-        AreaName:null,
-        CityName:null
+        AreaName: null,
+        CityName: null
 
     })
 
 
 
     useEffect(() => {
+        debugger
+        setRequest({ ...request, RequestingUserId: User.UserId })
         axios.get("http://localhost:3000/Location/getAllAreas").then((res) => {
             setAreList(res.data)
         })
@@ -136,10 +143,10 @@ const FillReqForm = (props) => {
 
     async function handleChange(e) {
 
-        if (e.target.name === 'Imag') {
-            handleFileChanges()
-            handleSubmit()
-        }
+        // if (e.target.name === 'Imag') {
+        //     handleFileChanges()
+        //     handleSubmit()
+        // }
 
         console.log(e);
         setRequest({ ...request, [e.target.name]: e.target.value })
@@ -429,5 +436,5 @@ const FillReqForm = (props) => {
 
         </div>
     )
-}
+})
 export default FillReqForm;

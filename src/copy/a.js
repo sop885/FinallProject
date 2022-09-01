@@ -25,7 +25,10 @@ const A = (props) => {
     let always1 = "  הבקשה התקבלה בתאריך"
     let always2 = "  בשעה"
     let Req = [];
+    let ReqU = []; //מערך כל היוזרים שמחליפים
     const [reqs, setReqs] = useState()
+    const [req, setReq] = useState()
+    const [reqU, setReqU] = useState()
     //איזה request 
     useEffect(() => {
 

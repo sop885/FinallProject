@@ -1,17 +1,17 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import axios from 'axios';
 
 debugger
 const Print = (props) => {
-     const {id}=props
-     const [rep, setRep] = useState()
-     let res
-    useEffect(async()=>{
+    const { id } = props
+    const [rep, setRep] = useState()
+    let res
+    useEffect(async () => {
         debugger
-       res = await axios.get(`http://localhost:3000/Action/findUser/${id}`)
-       setRep(res.data)
-    },[])
+        res = await axios.get(`http://localhost:3000/Action/findReqUser/${id}`)
+        setRep(res.data)
+    }, [])
     // 
     function getAge(dateString) {
         var today = new Date();
@@ -24,24 +24,19 @@ const Print = (props) => {
         return age;
     }
     return (
-        <div className="myformf" style={{marginRight:"10%"}}>      
-           <Form>
-                
-                                        {rep?<div>
-                                           
-                                             <h4>פרטי המבקש</h4>
-                                             <h5 className="contantb">
-                                                 <b>שם:</b >{rep.UserName}<br />                                   
-                                                <b>טלפון ליצירת קשר:</b> {rep.PhoneNumber}<br /> 
-                                                <b>מייל ליצירת קשר:</b> {rep.Mail}<br /> 
-                                               
+        <div style={{ marginTop: "3%" }}>
+            {rep ? <div>
+                <h4>פרטי המבקש</h4>
+                <h5 className="contantb">
+                    <b>שם:</b > {rep.UserName}<br />
+                    <b>טלפון ליצירת קשר:</b> {rep.PhoneNumber}<br />
+                    <b>מייל ליצירת קשר:</b> {rep.Mail}<br />
+                </h5>
+            </div> : ''}
 
-                                            
-                                            </h5> 
-                                     </div>:'' } 
 
-           </Form>
-       </div>
-      
-    )}
+        </div>
+
+    )
+}
 export default Print;

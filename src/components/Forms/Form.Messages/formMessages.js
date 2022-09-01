@@ -15,7 +15,7 @@ function mapStateToProps(state) {
     }
 }
 
-const MessageForm = (props) => {
+const MessageForm =connect(mapStateToProps)( (props) => {
     const { dispatch, requests, user } = props
     const [b, setB] = useState()
 
@@ -32,6 +32,7 @@ const MessageForm = (props) => {
 
 
     useEffect(() => {
+        
         // if (!requests || requests.length == 0) {
         axios.get(`http://localhost:3000/Action/getUserActions/${user.UserId}`).then((res) => {
             dispatch(allRequests(res.data))
@@ -63,5 +64,5 @@ const MessageForm = (props) => {
 
         </div>
     )
-}
-export default connect(mapStateToProps)(MessageForm);
+})
+export default MessageForm;

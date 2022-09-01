@@ -46,7 +46,7 @@ export default connect(mapStateToProps)(function LoadingButton(props) {
     let users = []
     let ok = await checkFunc()
     if (ok) {
-      CurrentRequest.RequestingUserId = User._id
+      // CurrentRequest.RequestingUserId = User.userId
       axios.post(`http://localhost:3000/Action/createRequest/${CurrentRequest.RequestingUserId}`, CurrentRequest).then((res) => {
         dispatch(allRequests(res.data.action));
         console.log(res.data);

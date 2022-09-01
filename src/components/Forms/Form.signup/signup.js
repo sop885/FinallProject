@@ -174,193 +174,137 @@ const S = (props) => {
     }, [isLoading]);
 
 
-    function saveNewUser(e) {
-        console.log(e)
-
-        if (e.target.name === 'Diploma') {
-            if (user.Diploma === null || user.Diploma === "")
-                return false
-            else
-                return true
-
-        }
+    function saveNewUser() {
 
 
-        if (e.target.name === 'Gender') {
-            if (user.Gender === null || user.Gender === "")
-                return false
-            else
-                return true
-        }
 
-        if (e.target.name === 'AreaCode') {
-            if (user.AreaCode === null || user.AreaCode === "")
-                return false
-            else
-                return true
-        }
+        if (user.Diploma === null || user.Diploma === "")
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
 
-        if (e.target.name === 'CityCode') {
-            if (user.CityCode === null || user.CityCode === "")
-                return false
-            else
-                return true
-        }
 
-        if (e.target.name === 'Status') {
-            if (user.Status === null || user.Status === "")
-                return false
 
-            else
-                return true
-        }
 
-        if (e.target.name === 'Communication') {
-            if (user.Communication === null || user.Communication === "")
-                return false
-            else
-                return true
-        }
 
-        if (e.target.name === 'Job') {
-            if (user.Job === null || user.Job === "")
-                return false
-            else
-                return true
-        }
-
-        if (e.target.name === 'UserName') {
-            var regex = /\d/g;
-
-            if (user.UserName === null || user.UserName === "")
-                return false
-            else {
-                if (regex.test(user.UserName))
-                    return false
-                else
-                    return true
-            }
-
+        if (user.Gender === null || user.Gender === "") {
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
         }
 
 
 
-        if (e.target.name === 'BirthDate') {
-            if (user.BirthDate === null || user.BirthDate === "")
-                return false
-            else {
-                if (validator.isDate(user.BirthDate)) {
-                    if (user.BirthDate > new Date().toISOString().split("T")[0])
-                        return false
 
-                    else
-                        return true
-                }
-                else
-                    return false
+        if (user.AreaCode === null || user.AreaCode === "")
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
+
+
+
+
+        if (user.CityCode === null || user.CityCode === "")
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
+
+
+
+        if (user.Status === null || user.Status === "")
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
+
+
+
+
+        if (user.Communication === null || user.Communication === "")
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
+
+
+
+
+        if (user.Job === null || user.Job === "")
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
+
+
+
+        var regex = /\d/g;
+
+        if (user.UserName === null || user.UserName === "") {
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
+        }
+        else {
+            if (regex.test(user.UserName)) {
+                return alert("שם לא תקין!")
             }
         }
 
 
 
 
-        if (e.target.name === 'PhoneNumber') {
-            if (user.PhoneNumber === null || user.PhoneNumber === "")
-                return false
-            else {
-
-                if (!(user.PhoneNumber.match(/^[0-9]+$/)))
-                    return false
-
-                if ((user.PhoneNumber.length < 9))
-
-                    return false
 
 
-
-                return true
-
-
-            }
+        if (user.BirthDate === null || user.BirthDate === "") {
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
         }
-
-
-        if (e.target.name === 'Mail') {
-            if (user.Mail === null || user.Mail === "")
-                return false
-            else {
-
-                if (!(user.Mail.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))) {
-
-                    return false
-                }
-                else {
-                    return true
-
+        else {
+            if (validator.isDate(user.BirthDate)) {
+                if (user.BirthDate > new Date().toISOString().split("T")[0]) {
+                    return alert("תאריך לא חוקי!")
                 }
             }
 
         }
 
 
-        if (e.target.name === 'Password') {
-
-            if (user.Password === null || user.Password === "")
-
-                return false
-
-            if ((user.Password.length != 8)) {
 
 
-                return false
+
+
+        if (user.PhoneNumber === null || user.PhoneNumber === "") {
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
+        }
+        else {
+            if (!(user.PhoneNumber.match(/^[0-9]+$/))) {
+                return alert("מספר טלפון לא תקין!")
             }
-            // //בדיקה האם הסיסמא קיימת כבר במאגר הסיסמאות
-            // if ((user.Password.match())) {
-
-
-            //     setErrorMessage({ ...errorMessage, password: 'הסיסמא הזו קיימת כבר, אנא הכנס סיסמא אחרת!' })
-            //     return false
-            // }
-
-            if (!(user.Password.match(/^[0-9]+$/))) {
-
-
-
-                return false
+            if ((user.PhoneNumber.length < 9)) {
+                return alert("מספר טלפון לא תקין!")
             }
-
-            else {
-                return true
-
-            }
-
         }
 
 
-        if (e.target.name === 'ValidatePass') {
-
-            if (user.ValidatePass === null || user.ValidatePass === "") {
-
-                return false
-            }
-            else {
-                if
-                    ((user.Password !== user.ValidatePass)) {
 
 
-                    return false
-                }
-                else {
-
-                    return true
-
-                }
-
-
-            }
-
+        if (user.Mail === null || user.Mail === "") {
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
+        }
+        else {
+            if (!(user.Mail.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)))
+                return alert("כתובת מייל לא חוקית!")
         }
 
+
+
+
+
+
+        if (user.Password === null || user.Password === "") {
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
+        }
+        if ((user.Password.length != 8)) {
+            return alert("הסיסמא לא תקינה!")
+        }
+        if (!(user.Password.match(/^[0-9]+$/))) {
+            return alert("הסיסמא לא תקינה!")
+        }
+
+
+
+
+
+        if (user.ValidatePass === null || user.ValidatePass === "") {
+            return alert("אנא מלא את כל הפרטים הנדרשים!")
+        }
+        else {
+            if
+                ((user.Password !== user.ValidatePass)) {
+                return alert("אימות סיסמא לא תקין!")
+            }
+        }
+        save();
     }
 
     function save() {
@@ -386,44 +330,21 @@ const S = (props) => {
 
             }
             else {
+                formData.append({ "user": user })
 
-                if (saveNewUser())
-                    if (user.ValidatePass !== null && user.ValidatePass !== "")
-                        if (user.Password !== null && user.Password !== "")
-                            if (user.Mail !== null && user.Mail !== "")
-                                if (user.PhoneNumber !== null && user.PhoneNumber !== "")
-                                    if (user.BirthDate !== null && user.BirthDate !== "")
-                                        if (user.UserName !== null && user.UserName !== "")
-                                            if (user.Job !== null && user.Job !== "")
-                                                if (user.Communication !== null && user.Communication !== "")
-                                                    if (user.Status !== null && user.Status !== "")
-                                                        if (user.CityCode !== null && user.CityCode !== "")
-                                                            if (user.AreaCode !== null && user.AreaCode !== "")
-                                                                if (user.Gender !== null && user.Gender !== "")
-                                                                    if (user.Diploma !== null && user.Diploma !== "") {
-                                                                        setErrorMessage({ errorMessage, password: '' })
-                                                                        formData.append({ "user": user })
+                axios.post("http://localhost:3000/User/createUser", formData).then((res) => {
+                    console.log(res.data)
+                    // לשלוח לשמירה בסטור
+                    dispatch(createUser(user))
+                    if (!isLoading) {
+                        handleClick()
+                    }
 
-                                                                        axios.post("http://localhost:3000/User/createUser", formData).then((res) => {
-                                                                            console.log(res.data)
-                                                                            // לשלוח לשמירה בסטור
-                                                                            dispatch(createUser(user))
-                                                                            if (!isLoading) {
-                                                                                handleClick()
-                                                                            }
-
-                                                                        })
-                                                                        alert(" הרשמתך בוצעה בהצלחה!")
-                                                                        setShowC(false)
-                                                                        navigate("/", { state: { data: true } })
-                                                                        return true;
-
-
-                                                                    }
-
-                // }
-
-                return alert("אנא מלא את כל הפרטים הנדרשים!")
+                })
+                alert(" הרשמתך בוצעה בהצלחה!")
+                setShowC(false)
+                navigate("/", { state: { data: true } })
+                return true;
             }
 
         }).catch((err) => {
@@ -433,6 +354,7 @@ const S = (props) => {
 
 
     }
+
     const passref = useRef()
     const passMoreref = useRef()
 
@@ -685,7 +607,7 @@ const S = (props) => {
             }
 
         }
-        saveNewUser(e.target.value)
+        // saveNewUser(e.target.value)
     }
     return (
         <>
@@ -713,7 +635,7 @@ const S = (props) => {
                                     <Form.Group as={Col} controlId="">
                                         <Form.Label >שם מלא</Form.Label>
                                         <span className="span" >{errorMessage.name}</span>
-                                        <Form.Control name="UserName" onChange={handleChange, saveNewUser} type="" placeholder="הכנס שם פרטי ושם משפחה" />
+                                        <Form.Control name="UserName" onChange={handleChange} type="" placeholder="הכנס שם פרטי ושם משפחה" />
 
                                     </Form.Group>
 
@@ -723,7 +645,7 @@ const S = (props) => {
                                     <Form.Group as={Col} controlId="formGridState">
                                         <Form.Label>מין</Form.Label>
                                         <span className="span" >{errorMessage.gender}</span>
-                                        <Form.Select name="Gender" onChange={handleChange, saveNewUser} defaultValue="בחר איזור:">
+                                        <Form.Select name="Gender" onChange={handleChange} defaultValue="בחר איזור:">
                                             <option></option>
                                             <option>נקבה</option>
                                             <option>זכר</option>
@@ -900,7 +822,7 @@ const S = (props) => {
 
 
 
-                                <Button className="button" style={{ width: "10%", marginRight: "43%", marginBottom: "5%" }} onClick={save}>שמור</Button>
+                                <Button className="button" style={{ width: "10%", marginRight: "43%", marginBottom: "5%" }} onClick={saveNewUser}>שמור</Button>
                             </Form>
 
 
