@@ -106,7 +106,7 @@ const B = (props) => {
                     {item.status == true ?
                         <Accordion className="t" 
                          key={index} title={<div>
-                             <img src={user.Imag===undefined||user.Imag?.path==''?P:`http://localhost:3000/${user.Imag.path}`} className="imgaco" />
+                             <img src={user.Imag===undefined&&user.Imag.path==''?P:`http://localhost:3000/${user.Imag.path}`} className="imgaco" />
                          <b style={{color:"green"}}>{always1}{item.CurrentDate} | {always2}  {item.CurrentTime}</b>
                          </div>}
                             content={
@@ -156,7 +156,7 @@ const B = (props) => {
 
                         />:
                         <Accordion className="f" key={index} title={<div>
-                        <img src={user.Imag===undefined||user.Imag?.path==''?P:`http://localhost:3000/${user.Imag.path}`} className="imgaco" />
+                        {/* <img src={user.Imag===undefined&&user.Imag.path==''?P:`http://localhost:3000/${user.Imag.path}`} className="imgaco" /> */}
                         <b style={{color:"red"}}>{always1}{item.CurrentDate} | {always2}  {item.CurrentTime}</b>
                         </div>}
                         content={

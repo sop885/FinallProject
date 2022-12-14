@@ -65,14 +65,14 @@ export default connect(mapStateToProps)(function F(props) {
     const [typeJob, setTypeJob] = useState([{ typeJob: "גננ/ת" }, { typeJob: "גננ/ת חינוך מיוחד" }, { typeJob: "סייע/ת" }, { typeJob: "סייע/ת חינוך מיוחד" }, { typeJob: "מורה" }, { typeJob: "מורה חינוך מיוחד" }, { typeJob: "סייע/ת רפואי/ת" }, { typeJob: "מרצה" },])
 
 
-
+    const [file, setFile] = useState();
+    const [fileName, setFileName] = useState("");
     const [areaSelected, setAreaSelected] = useState("מרכז")
     const [cities, setCities] = useState([{ cityId: 1, cityName: "אלעד", areaName: "מרכז" }, { cityId: 2, cityName: "רכסים", areaName: "צפון" }, { cityId: 3, cityName: "אשדוד", areaName: "דרום" }])
     const [areas, setAreas] = useState([{ areaId: 1, areaName: "מרכז" }, { areaId: 2, areaName: "דרום" }, { areaId: 3, areaName: "צפון" }])
     const [isLoading, setLoading] = useState(false);
     const [checkAll, setCheckAll] = useState(false)
     const { dispatch } = props
-
     useEffect(() => {
 
         if (isLoading) {
@@ -89,6 +89,7 @@ export default connect(mapStateToProps)(function F(props) {
         axios.get("http://localhost:3000/Location/getAllAreas").then((res) => {
             setAreList(res.data)
         })
+
     }, [])
 
 
@@ -96,20 +97,35 @@ export default connect(mapStateToProps)(function F(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        debugger
         let file = new FormData()
         file.append('file', image.data)
 
-        const response = await axios.post('http://localhost:3030/image', file)
-        if (response) setStatus(response.statusText)
+        await axios.get('http://localhost:3000/User/UpdateImageUser', file).then(res => {
+            console.log(res.data)
+        })
+        // if (response) setStatus(response.statusText)
     }
 
     const handleFileChange = (e) => {
-        const img = {
-            preview: URL.createObjectURL(e.target.files[0]),
-            data: e.target.files[0],
-        }
-        setImage(img)
+        debugger
+        setFile(e.target.files[0]);
+        setFileName(e.target.files[0].name);
+        setUser({ ...user, [e.target.name]: fileName })
+        const formData = new FormData();
+        formData.append("file", e.target.files[0]);
+        formData.append("fileName", e.target.files[0].name);
+        //  axios.get('http://localhost:3000/User/UpdateImageUser', formData).then(res => {
+        //         console.log(res.data)
+        //     })
+        // const img = {
+        //     preview: URL.createObjectURL(e.target.files[0]),
+        //     data: e.target.files[0],
+        // }
+        // setImage({ ...image, preview: URL.createObjectURL(e.target.files[0]) })
+        // setImage({ ...image, data: e.target.files[0] })
     }
+
 
 
     const [errorMessage, setErrorMessage] = useState({
@@ -154,7 +170,7 @@ export default connect(mapStateToProps)(function F(props) {
 
 
     function updateUsers() {
-
+        debugger
         // בדיקות תקינות - א"א ללכת בלי לגמור למלא הכל.
         // if (user.Password != user.ValidatePass)
         //     alert(" !הסיסמאות לא תואמות, אנא אמת סיסמא שוב")
@@ -162,6 +178,9 @@ export default connect(mapStateToProps)(function F(props) {
 
         // if(user.UserName!=null&&user.Password!=null&&user.ValidatePass!=null&&user.Diploma!=null&&user.Gender!=null&&user.BirthDate!=null&&user.PhoneNumber!=null&&user.AreaCode!=null&&user.CityCode!=null&&user.Mail!=null&&user.Status!=null&&user.Job!=null&&user.Communication!=null&&user.Imag!=null) 
         // {}
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("fileName", fileName);
 
         let UserId = user.UserId
         let password = user.Password
@@ -189,14 +208,22 @@ export default connect(mapStateToProps)(function F(props) {
                                                                 if (user.Gender !== null && user.Gender !== "")
                                                                     if (user.Diploma !== null && user.Diploma !== "") {
                                                                         setErrorMessage({ errorMessage, password: '' })
-
-                                                                        axios.put(`http://localhost:3000/User/updateUser/${UserId}`, user).then((res) => {
+                                                                        Object.keys(user).map(key =>
+                                                                            formData.append(key, user[key])
+                                                                        )
+                                                                        axios.put(`http://localhost:3000/User/updateUser/${UserId}`, formData).then((res) => {
                                                                             console.log(res.data)
                                                                             // לשלוח לשמירה בסטור
-                                                                            dispatch(updateUser(user))
-                                                                            if (!isLoading) {
-                                                                                handleClick()
-                                                                            }
+                                                                            axios.get(`http://localhost:3000/User/CheckConnect/${user.UserName}/${user.Password}`).then((data) => {
+                                                                                console.log(data.data)
+
+                                                                                dispatch(updateUser(data.data))
+                                                                                if (!isLoading) {
+                                                                                    handleClick()
+                                                                                }
+                                                                            })
+
+
 
                                                                             //  currentUser={user}
                                                                             // setUser(currentUser)
@@ -270,240 +297,244 @@ export default connect(mapStateToProps)(function F(props) {
     async function handleChange(e) {
 
         if (e.target.name === 'Imag') {
-            handleFileChange()
-            handleSubmit()
+            handleFileChange(e)
+            // handleSubmit(e)
+
         }
-        // if (e.target.name === 'ValidatePass') {
-        //    if(errorMessage.checkPassword=='הסיסמא תקינה!'){
-        //        checkPassword
-        //    }
-        // }
+        else {
+            // if (e.target.name === 'ValidatePass') {
+            //    if(errorMessage.checkPassword=='הסיסמא תקינה!'){
+            //        checkPassword
+            //    }
+            // }
 
-        console.log(e);
-        setUser({ ...user, [e.target.name]: e.target.value })
-        user[e.target.name] = e.target.value
-
-
-        if (e.target.name === 'Diploma') {
-            if (user.Diploma === null || user.Diploma === "") {
-                setErrorMessage({ ...errorMessage, diploma: 'בחר ערך!' })
-                return false
-            }
-            else {
-                await setErrorMessage({ errorMessage, diploma: '' })
-            }
-        }
+            console.log(e);
+            setUser({ ...user, [e.target.name]: e.target.value })
+            user[e.target.name] = e.target.value
 
 
-        if (e.target.name === 'Gender') {
-            if (user.Gender === null || user.Gender === "") {
-                setErrorMessage({ ...errorMessage, gender: 'בחר ערך!' })
-                return false
-            }
-            else {
-                await setErrorMessage({ errorMessage, gender: '' })
-            }
-        }
+            if (e.target.name === 'Diploma') {
+                if (user.Diploma === null || user.Diploma === "") {
+                    setErrorMessage({ ...errorMessage, diploma: 'בחר ערך!' })
+                    return false
 
-        if (e.target.name === 'AreaCode') {
-            if (user.AreaCode === null || user.AreaCode === "") {
-                setErrorMessage({ ...errorMessage, area: 'בחר ערך!' })
-                return false
+                }
+                else {
+                    await setErrorMessage({ errorMessage, diploma: '' })
+                }
             }
-            else {
-                await setErrorMessage({ errorMessage, area: '' })
-            }
-        }
 
-        if (e.target.name === 'CityCode') {
-            if (user.CityCode === null || user.CityCode === "") {
-                setErrorMessage({ ...errorMessage, city: 'בחר ערך!' })
-                return false
-            }
-            else {
-                await setErrorMessage({ errorMessage, city: '' })
-            }
-        }
 
-        if (e.target.name === 'Status') {
-            if (user.Status === null || user.Status === "") {
-                setErrorMessage({ ...errorMessage, status: 'בחר ערך!' })
-                return false
-            }
-            else {
-                await setErrorMessage({ errorMessage, status: '' })
-            }
-        }
-
-        if (e.target.name === 'Communication') {
-            if (user.Communication === null || user.Communication === "") {
-                setErrorMessage({ ...errorMessage, connect: 'בחר ערך!' })
-                return false
-            }
-            else {
-                await setErrorMessage({ errorMessage, connect: '' })
-            }
-        }
-
-        if (e.target.name === 'Job') {
-            if (user.Job === null || user.Job === "") {
-                setErrorMessage({ ...errorMessage, job: 'בחר ערך!' })
-                return false
-            }
-            else {
-                await setErrorMessage({ errorMessage, job: '' })
-            }
-        }
-
-        if (e.target.name === 'UserName') {
-            var regex = /\d/g;
-
-            if (user.UserName === null || user.UserName === "") {
-                setErrorMessage({ ...errorMessage, name: 'הכנס שם!' })
-                return false
-            }
-            else {
-                if (regex.test(user.UserName)) {
-
-                    setErrorMessage({ ...errorMessage, name: 'הכנס שם ללא מספרים!' })
+            if (e.target.name === 'Gender') {
+                if (user.Gender === null || user.Gender === "") {
+                    setErrorMessage({ ...errorMessage, gender: 'בחר ערך!' })
                     return false
                 }
                 else {
-                    await setErrorMessage({ errorMessage, name: '' })
-
+                    await setErrorMessage({ errorMessage, gender: '' })
                 }
             }
 
-        }
+            if (e.target.name === 'AreaCode') {
+                if (user.AreaCode === null || user.AreaCode === "") {
+                    setErrorMessage({ ...errorMessage, area: 'בחר ערך!' })
+                    return false
+                }
+                else {
+                    await setErrorMessage({ errorMessage, area: '' })
+                }
+            }
 
+            if (e.target.name === 'CityCode') {
+                if (user.CityCode === null || user.CityCode === "") {
+                    setErrorMessage({ ...errorMessage, city: 'בחר ערך!' })
+                    return false
+                }
+                else {
+                    await setErrorMessage({ errorMessage, city: '' })
+                }
+            }
 
+            if (e.target.name === 'Status') {
+                if (user.Status === null || user.Status === "") {
+                    setErrorMessage({ ...errorMessage, status: 'בחר ערך!' })
+                    return false
+                }
+                else {
+                    await setErrorMessage({ errorMessage, status: '' })
+                }
+            }
 
-        if (e.target.name === 'BirthDate') {
-            if (user.BirthDate === null || user.BirthDate === "") {
-                setErrorMessage({ ...errorMessage, bbirthdate: 'הכנס תאריך!' })
-                return false
-            } else {
-                if (validator.isDate(user.BirthDate)) {
-                    if (user.BirthDate > new Date().toISOString().split("T")[0]) {
-                        setErrorMessage({ ...errorMessage, bbirthdate: 'תאריך לא חוקי!' })
+            if (e.target.name === 'Communication') {
+                if (user.Communication === null || user.Communication === "") {
+                    setErrorMessage({ ...errorMessage, connect: 'בחר ערך!' })
+                    return false
+                }
+                else {
+                    await setErrorMessage({ errorMessage, connect: '' })
+                }
+            }
+
+            if (e.target.name === 'Job') {
+                if (user.Job === null || user.Job === "") {
+                    setErrorMessage({ ...errorMessage, job: 'בחר ערך!' })
+                    return false
+                }
+                else {
+                    await setErrorMessage({ errorMessage, job: '' })
+                }
+            }
+
+            if (e.target.name === 'UserName') {
+                var regex = /\d/g;
+
+                if (user.UserName === null || user.UserName === "") {
+                    setErrorMessage({ ...errorMessage, name: 'הכנס שם!' })
+                    return false
+                }
+                else {
+                    if (regex.test(user.UserName)) {
+
+                        setErrorMessage({ ...errorMessage, name: 'הכנס שם ללא מספרים!' })
                         return false
                     }
                     else {
-                        setErrorMessage({ errorMessage, bbirthdate: '' })
+                        await setErrorMessage({ errorMessage, name: '' })
 
                     }
                 }
 
             }
-        }
 
 
 
-
-        if (e.target.name === 'PhoneNumber') {
-            if (user.PhoneNumber === null || user.PhoneNumber === "") {
-                setErrorMessage({ ...errorMessage, phon: 'הכנס טלפון!' })
-                return false
-            }
-            else {
-
-                if (!(user.PhoneNumber.match(/^[0-9]+$/))) {
-
-
-                    setErrorMessage({ ...errorMessage, phon: 'הכנס מספרים בלבד!' })
+            if (e.target.name === 'BirthDate') {
+                if (user.BirthDate === null || user.BirthDate === "") {
+                    setErrorMessage({ ...errorMessage, bbirthdate: 'הכנס תאריך!' })
                     return false
-                }
-                if ((user.PhoneNumber.length < 9)) {
+                } else {
+                    if (validator.isDate(user.BirthDate)) {
+                        if (user.BirthDate > new Date().toISOString().split("T")[0]) {
+                            setErrorMessage({ ...errorMessage, bbirthdate: 'תאריך לא חוקי!' })
+                            return false
+                        }
+                        else {
+                            setErrorMessage({ errorMessage, bbirthdate: '' })
 
-                    setErrorMessage({ ...errorMessage, phon: 'המספר קצר מדי!' })
-                    return false
-                }
-
-                else {
-                    await setErrorMessage({ errorMessage, phon: '' })
-
-                }
-            }
-        }
-
-
-        if (e.target.name === 'Mail') {
-            if (user.Mail === null || user.Mail === "") {
-                setErrorMessage({ ...errorMessage, email: 'הכנס מייל!' })
-                return false
-            }
-            else {
-
-                if (!(user.Mail.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))) {
-
-                    setErrorMessage({ ...errorMessage, email: 'כתובת מייל לא חוקית!' })
-                    return false
-                }
-                else {
-                    await setErrorMessage({ errorMessage, email: '' })
+                        }
+                    }
 
                 }
             }
 
-        }
 
 
-        if (e.target.name === 'Password') {
 
-            if (user.Password === null || user.Password === "") {
-                setErrorMessage({ ...errorMessage, password: 'הכנס סיסמא!' })
-                return false
-            }
-            if ((user.Password.length != 8)) {
-
-                setErrorMessage({ ...errorMessage, password: 'הסיסמא קצרה מידי, אנא הכנס 8 ספרות!' })
-                return false
-            }
-            // //בדיקה האם הסיסמא קיימת כבר במאגר הסיסמאות
-            // if ((user.Password.match())) {
-
-
-            //     setErrorMessage({ ...errorMessage, password: 'הסיסמא הזו קיימת כבר, אנא הכנס סיסמא אחרת!' })
-            //     return false
-            // }
-
-            if (!(user.Password.match(/^[0-9]+$/))) {
-
-
-                setErrorMessage({ ...errorMessage, password: 'הכנס מספרים בלבד!' })
-                return false
-            }
-
-            else {
-                await setErrorMessage({ errorMessage, password: '' })
-
-            }
-
-        }
-
-
-        if (e.target.name === 'ValidatePass') {
-
-            if (user.ValidatePass === null || user.ValidatePass === "") {
-                setErrorMessage({ ...errorMessage, checkPassword: 'הכנס סיסמא!' })
-                return false
-            }
-            else {
-                if
-                    ((user.Password !== user.ValidatePass)) {
-
-                    setErrorMessage({ ...errorMessage, checkPassword: 'סיסמא שגויה!' })
+            if (e.target.name === 'PhoneNumber') {
+                if (user.PhoneNumber === null || user.PhoneNumber === "") {
+                    setErrorMessage({ ...errorMessage, phon: 'הכנס טלפון!' })
                     return false
                 }
                 else {
 
-                    await setErrorMessage({ errorMessage, checkPassword: 'הסיסמא תקינה!' })
+                    if (!(user.PhoneNumber.match(/^[0-9]+$/))) {
 
+
+                        setErrorMessage({ ...errorMessage, phon: 'הכנס מספרים בלבד!' })
+                        return false
+                    }
+                    if ((user.PhoneNumber.length < 9)) {
+
+                        setErrorMessage({ ...errorMessage, phon: 'המספר קצר מדי!' })
+                        return false
+                    }
+
+                    else {
+                        await setErrorMessage({ errorMessage, phon: '' })
+
+                    }
                 }
+            }
 
+
+            if (e.target.name === 'Mail') {
+                if (user.Mail === null || user.Mail === "") {
+                    setErrorMessage({ ...errorMessage, email: 'הכנס מייל!' })
+                    return false
+                }
+                else {
+
+                    if (!(user.Mail.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))) {
+
+                        setErrorMessage({ ...errorMessage, email: 'כתובת מייל לא חוקית!' })
+                        return false
+                    }
+                    else {
+                        await setErrorMessage({ errorMessage, email: '' })
+
+                    }
+                }
 
             }
 
+
+            if (e.target.name === 'Password') {
+
+                if (user.Password === null || user.Password === "") {
+                    setErrorMessage({ ...errorMessage, password: 'הכנס סיסמא!' })
+                    return false
+                }
+                if ((user.Password.length != 8)) {
+
+                    setErrorMessage({ ...errorMessage, password: 'הסיסמא קצרה מידי, אנא הכנס 8 ספרות!' })
+                    return false
+                }
+                // //בדיקה האם הסיסמא קיימת כבר במאגר הסיסמאות
+                // if ((user.Password.match())) {
+
+
+                //     setErrorMessage({ ...errorMessage, password: 'הסיסמא הזו קיימת כבר, אנא הכנס סיסמא אחרת!' })
+                //     return false
+                // }
+
+                if (!(user.Password.match(/^[0-9]+$/))) {
+
+
+                    setErrorMessage({ ...errorMessage, password: 'הכנס מספרים בלבד!' })
+                    return false
+                }
+
+                else {
+                    await setErrorMessage({ errorMessage, password: '' })
+
+                }
+
+            }
+
+
+            if (e.target.name === 'ValidatePass') {
+
+                if (user.ValidatePass === null || user.ValidatePass === "") {
+                    setErrorMessage({ ...errorMessage, checkPassword: 'הכנס סיסמא!' })
+                    return false
+                }
+                else {
+                    if
+                        ((user.Password !== user.ValidatePass)) {
+
+                        setErrorMessage({ ...errorMessage, checkPassword: 'סיסמא שגויה!' })
+                        return false
+                    }
+                    else {
+
+                        await setErrorMessage({ errorMessage, checkPassword: 'הסיסמא תקינה!' })
+
+                    }
+
+
+                }
+
+            }
         }
         return true
 
@@ -680,11 +711,14 @@ export default connect(mapStateToProps)(function F(props) {
                 </Row>
 
                 <Row className="mb-3 input" >
-                    {image.preview && <img src={image.preview} width='100' height='100' />}
-                    <Form.Group onSubmit={handleSubmit} controlId="formFile" className="mb-3">
+                    {/* {file && <img src={file.path} width='100' height='100' />} */}
+                    <Form.Group controlId="formFile" className="mb-3">
                         <Form.Label className="lable">תמונת פרופיל</Form.Label>
-                        <Form.Control value={user.Imag} name="Imag" onChange={handleChange} type="file" />
-
+                        {file == undefined && currentUser.Imag !== undefined && currentUser.Imag.path !== '' ? <>
+                            <Form.Control name="Imag" onChange={handleChange} type="file" />
+                        </>
+                            : <Form.Control name="Imag" onChange={handleChange} type="file" />
+                        }
 
                     </Form.Group>
                 </Row>
@@ -702,7 +736,7 @@ export default connect(mapStateToProps)(function F(props) {
                     <Form.Group as={Col} controlId="formGridPassword">
                         <Form.Label className="lable">אימות סיסמה</Form.Label>
                         <span ref={checkPassword} className={getClassName()}>{errorMessage.checkPassword}</span>
-                        <Form.Control name="ValidatePass" onChange={handleChange} type="password" maxLength="8" placeholder="הקש שוב סיסמא" />
+                        <Form.Control value={user.Password} name="ValidatePass" onChange={handleChange} type="password" maxLength="8" placeholder="הקש שוב סיסמא" />
 
                     </Form.Group>
                 </Row>

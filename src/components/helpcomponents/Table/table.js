@@ -5,6 +5,7 @@ import Submitb from '../button/submitb'
 import Resetb from '../button/resetb'
 const Tablet = (props) => {
     let { users } = props;
+    console.log(users);
     const [selectedUsers, setSelectedUsers] = useState([])
     const checkBoxRef = useRef(null)
     // const arr = [
@@ -94,8 +95,7 @@ const Tablet = (props) => {
                             <td>{getAge(item.BirthDate)}</td>
                             <td>{item.PhoneNumber}</td>
                             <td>{item.UserName}</td>
-                            <td>{item.Imag}</td>
-                            {/* <td> <input type="image"></input></td> */}
+                            <td>{item.Imag&&<img src={`http://localhost:3000/${item.Imag?.path}`}  className="imgaco"/>}</td>
                             <td><input type="checkbox" className="inputi" ref={checkBoxRef} onClick={check}></input></td>
                         </tr>
 

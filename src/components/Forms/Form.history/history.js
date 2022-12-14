@@ -32,7 +32,8 @@ const HistoryForm = (props) => {
     
 
     return (
-        <div style={{marginRight:"15%"}} className="myformh">      
+        <div style={{marginRight:"15%"}} className="myformh">  
+        <br /> <h2 style={{ textAlign: "center", fontSize: "20px", textShadow: "gray 0 1px 2px" }}> הסטוריה</h2>        
         <h3 ><b>בקשות שפתחתי</b></h3> 
          <History></History>
         <h3><b>בקשות שאישרתי</b></h3> 

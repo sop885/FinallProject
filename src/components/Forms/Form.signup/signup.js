@@ -312,7 +312,6 @@ const S = (props) => {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("fileName", fileName);
-
         // בדיקות תקינות - א"א ללכת בלי לגמור למלא הכל.
         // if (user.Password != user.ValidatePass)
         //     alert(" !הסיסמאות לא תואמות, אנא אמת סיסמא שוב")
@@ -330,7 +329,9 @@ const S = (props) => {
 
             }
             else {
-                formData.append({ "user": user })
+                Object.keys(user).map(key=>
+                   formData.append( key, user[key]) 
+                )
 
                 axios.post("http://localhost:3000/User/createUser", formData).then((res) => {
                     console.log(res.data)
@@ -371,8 +372,6 @@ const S = (props) => {
     async function handleChange(e) {
 
         console.log(e);
-
-
 
         if (e.target.name === 'Imag') {
             setFile(e.target.files[0]);

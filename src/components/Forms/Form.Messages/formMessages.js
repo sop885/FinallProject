@@ -55,6 +55,7 @@ const MessageForm =connect(mapStateToProps)( (props) => {
 
     return (
         <div style={{ marginRight: "15%" }} className="myformm">
+            <br /> <h2 style={{ textAlign: "center", fontSize: "20px", textShadow: "gray 0 1px 2px" }}> הודעות</h2>          
             {isBd(user.BirthDate) == true ? <Messageb></Messageb> : 
 
                 <Message></Message>

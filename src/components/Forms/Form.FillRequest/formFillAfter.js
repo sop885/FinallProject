@@ -20,7 +20,9 @@ function mapStateToProps(state) {
 }
 
 const FillReqForm = connect(mapStateToProps)((props) => {
-    const { User } = props;
+    const { User,requestss } = props;
+    console.log(props);
+    console.log(props.location);
     const [status, setStatus] = useState('')
     const [image, setImage] = useState({ preview: '', data: '' })
     const [val, setVal] = useState(50)
@@ -117,8 +119,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
     }
     async function check() {
         debugger
-        // if (handleChange())
-        //  {
+        if (handleChange()) {
 
             if (request.IsDiploma !== null && request.IsDiploma !== "")
                 if (request.AgeGroup !== null && request.AgeGroup !== "")
@@ -131,7 +132,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                                             if (request.DateEnd !== "" && request.DateEnd !== null)
                                                 if (request.DateStart !== "" && request.DateStart !== null)
                                                     return true
-        // }
+        }
         return alert("אנא מלא את כל הפרטים הנדרשים!")
 
 
@@ -289,7 +290,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                     <Form.Group as={Col} controlId="">
                         <Form.Label>התאריך המיועד</Form.Label>
                         <span className="spani">{errorMessage.fromDate}</span>
-                        <Form.Control value={request.DateStart} name="DateStart" type="date" formAction='dd/mm/yyyy' placeholder="Enter a date" onChange={handleChange} min={new Date().toISOString().split("T")[0]} />
+                        <Form.Control value={requestss.DateStart} name="DateStart" type="date" formAction='dd/mm/yyyy' placeholder="Enter a date" onChange={handleChange} min={new Date().toISOString().split("T")[0]} />
 
                     </Form.Group>
                 </Row>
@@ -298,7 +299,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                     <Form.Group as={Col} controlId="">
                         <Form.Label>עד התאריך</Form.Label>
                         <span className="spani">{errorMessage.toDate}</span>
-                        <Form.Control value={request.DateEnd} name="DateEnd" type="date" formAction='dd/mm/yyyy' placeholder="Enter a date" onChange={handleChange} min={request.DateStart} />
+                        <Form.Control value={requestss.DateEnd} name="DateEnd" type="date" formAction='dd/mm/yyyy' placeholder="Enter a date" onChange={handleChange} min={requestss.DateStart} />
                     </Form.Group>
                 </Row>
                 <br />
@@ -306,7 +307,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                     <Form.Group as={Col} controlId="formGridState">
                         <Form.Label>איזור המוסד</Form.Label>
                         <span className="spani">{errorMessage.area}</span>
-                        <Form.Select value={request.AreaName} name="AreaId" onChange={(e) => saveArea(e)} defaultValue="בחר איזור:">
+                        <Form.Select value={requestss.AreaName} name="AreaId" onChange={(e) => saveArea(e)} defaultValue="בחר איזור:">
                             <option> </option>
                             {areaList && areaList.length && areaList.map((item) => (
                                 <option value={item.AreaCode}>{item.AreaName}</option>
@@ -319,7 +320,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                     <Form.Group as={Col} controlId="">
                         <Form.Label>עיר </Form.Label>
                         <span className="spani">{errorMessage.city}</span>
-                        <Form.Select value={request.CityName} name="CityId" onChange={handleChange} defaultValue="בחר עיר:">
+                        <Form.Select value={requestss.CityName} name="CityId" onChange={handleChange} defaultValue="בחר עיר:">
                             <option> </option>
 
                             {CityList && CityList.length && CityList.map((item) => (
@@ -336,14 +337,14 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                     <Form.Group as={Col} controlId="">
                         <Form.Label>כתובת</Form.Label>
                         <span className="spani">{errorMessage.adress}</span>
-                        <Form.Control value={request.Adress} name="Adress" type="" placeholder="הכנס כתובת" onChange={handleChange} />
+                        <Form.Control value={requestss.Adress} name="Adress" type="" placeholder="הכנס כתובת" onChange={handleChange} />
                     </Form.Group>
                 </Row>
                 <Row className="mb-3 input" dir='rtl'>
                     <Form.Group as={Col} controlId="formGridState">
                         <Form.Label>התפקיד המבוקש</Form.Label>
                         <span className="spani">{errorMessage.job}</span>
-                        <Form.Select value={request.Job} name="Job" onChange={(e) => saveTypeJob(e)} defaultValue="בחר תפקיד:">
+                        <Form.Select value={requestss.Job} name="Job" onChange={(e) => saveTypeJob(e)} defaultValue="בחר תפקיד:">
                             <option></option>
                             {typeJob.map((item) => (
                                 <option key={item.typeJob}>{item.typeJob}</option>
@@ -357,7 +358,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                     <Form.Group as={Col} controlId="">
                         <Form.Label> שכבת גיל</Form.Label>
                         <span className="spani">{errorMessage.age}</span>
-                        <Form.Select value={request.AgeGroup} name="AgeGroup" onChange={handleChange} defaultValue="בחר :">
+                        <Form.Select value={requestss.AgeGroup} name="AgeGroup" onChange={handleChange} defaultValue="בחר :">
                             <option></option>
                             {ageGroup.filter(x => x.typeJob.includes(typeJobSelected)).map((item) =>
                                 <option key={item.ageGroup}>{item.ageGroup}</option>
@@ -370,7 +371,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                     <Form.Group as={Col} controlId="">
                         <Form.Label>הרכב המוסד</Form.Label>
                         <span className="spani">{errorMessage.type}</span>
-                        <Form.Select value={request.GenderPlace} name="GenderPlace" onChange={handleChange} defaultValue="בחר:">
+                        <Form.Select value={requestss.GenderPlace} name="GenderPlace" onChange={handleChange} defaultValue="בחר:">
                             <option></option>
                             <option>בנים</option>
                             <option>בנות</option>
@@ -386,7 +387,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                     <Form.Group as={Col} controlId="">
                         <Form.Label>מחליף בעל תעודת הוראה </Form.Label>
                         <span className="spani">{errorMessage.diploma}</span>
-                        <Form.Select value={request.IsDiploma} name="IsDiploma" onChange={handleChange} defaultValue="בחר :">
+                        <Form.Select value={requestss.IsDiploma} name="IsDiploma" onChange={handleChange} defaultValue="בחר :">
                             <option></option>
                             <option value={"חובה"}>חובה</option>
                             <option value={"לא חובה"}>לא חובה </option>
@@ -399,7 +400,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                     <Form.Group as={Col} controlId="formGridState">
                         <Form.Label>מין המחליף המבוקש</Form.Label>
                         <span className="spani">{errorMessage.gender}</span>
-                        <Form.Select value={request.ReplaceGender} name="ReplaceGender" defaultValue="בחר :" onChange={handleChange}>
+                        <Form.Select value={requestss.ReplaceGender} name="ReplaceGender" defaultValue="בחר :" onChange={handleChange}>
                             <option></option>
                             <option value="זכר">זכר</option>
                             <option value="נקבה">נקבה</option>
@@ -414,7 +415,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                         <Form.Label>תעריף משוער לשעה</Form.Label> <br />
                         <RangeSlider
                             name="Rate"
-                            value={request.Rate}
+                            value={requestss.Rate}
                             onChange={handleChange}
                             min={30}
                             max={200}
@@ -426,7 +427,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                 <br />
                 <Row className="mb-3 input" style={{ width: "87%" }}>
                     <InputGroup>
-                        <FormControl value={request.Note} dir="rtl" placeholder=" כאן ניתן לפרט לגבי שעות הפעילות וכו'" as="textarea" name="Note" onChange={handleChange} aria-label="With textarea" />
+                        <FormControl value={requestss.Note} dir="rtl" placeholder=" כאן ניתן לפרט לגבי שעות הפעילות וכו'" as="textarea" name="Note" onChange={handleChange} aria-label="With textarea" />
                         <InputGroup.Text>:הערות</InputGroup.Text>
 
                     </InputGroup>
@@ -438,6 +439,7 @@ const FillReqForm = connect(mapStateToProps)((props) => {
                     requestss={request}
                      />
                 </Row>
+                
             </Form>
 
         </div>

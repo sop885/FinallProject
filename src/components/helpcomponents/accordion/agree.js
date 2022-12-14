@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 // import React, { useState } from 'react';
 import './a.css'
 import Accordion from './aa';
-
+import P from '../../img/profile.jpg'
 import Confirmb from '../button/confirmb'
 import { connect } from 'react-redux'
 import axios from 'axios';
@@ -18,8 +18,8 @@ const mapStateToProps = (state) => {
 }
 function getDate(dateString) {
     var date = new Date(dateString);
-    const thisDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;       
-    
+    const thisDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
     return thisDate;
 }
 const A = (props) => {
@@ -27,18 +27,38 @@ const A = (props) => {
     const [isActive, setIsActive] = useState(false);
     const always1 = "  הבקשה אושרה בתאריך"
     const always2 = "  בשעה"
-    const Req = [];
-    const [reqs, setReqs] = useState()
+    // let Req = [];
+    const [reqs, setReqs] = useState([])
     //איזה request 
-    useEffect(() => {
-         debugger
-        request && request.length && request.map((item, index) => {
-            if (item.ReplacesUserId == user._id)
-                Req.push(item)
-        });
-        setReqs(Req)
-    }, [request])
+    useEffect(async () => {
+        setReqs([])
 
+        await request && request.length && request.map((item, index) => {
+            if (item.ReplacesUserId == user._id) {
+
+                let copyItem
+                axios.get(`http://localhost:3000/Action/findReqUser/${item.RequestingUserId}`).then(res => {
+                    console.log(res.data)
+                    debugger
+                    if (res.data.Imag == undefined)
+                        copyItem = { ...item, reqName: res.data.UserName }
+                    // Req.push({ ...item, reqName: res.data.UserName })
+                    else
+                        copyItem = { ...item, img: res.data.Imag.path, reqName: res.data.UserName }
+
+                    // Req.push({ ...item, img: res.data.Imag.path, reqName: res.data.UserName })
+                }).then(res => {
+                  
+                    setReqs(state => [...state, copyItem])
+                    //   setReqs(Req);
+                })
+                // Req.push(item)
+
+            }
+        })
+        // setReqs(Req);
+
+    }, [request])
     // useEffect(() => {
     //     debugger
     //             request && request.length && request.map((item, index) => {
@@ -49,17 +69,21 @@ const A = (props) => {
     //         }, [])
     function getTime(time) {
         var timen = new Date(time);
-        const thisTime = timen.getHours() + ':' + timen.getMinutes() + ':' + timen.getSeconds();          
+        const thisTime = timen.getHours() + ':' + timen.getMinutes() + ':' + timen.getSeconds();
         return thisTime;
     }
 
     return (
         <div>
-            
+
             <div className="accordion" dir="rtl">
                 {reqs && reqs.length && reqs.map((item, index) => (
-                    
-                    <Accordion key={index} title={<div><img src={user.Imag} className="imgaco" /> <b>{user.UserName}|{always1}  {item.CurrentDate} | {always2}  {item.CurrentTime}</b></div>}
+
+                    <Accordion key={index} title={<div>
+                        {/* p? */}
+                        <img src={item.img === undefined ? P : `http://localhost:3000/${item.img}`} className="imgaco" />
+                        <b>{item.reqName}|{always1}  {item.CurrentDate} | {always2}  {item.CurrentTime}</b>
+                    </div>}
                         content={
                             <div>
                                 <h4>פרטי הבקשה</h4>
@@ -75,15 +99,16 @@ const A = (props) => {
                                     <b> שכר שעתי ממוצע:</b> {item.Rate}<br />
                                     <b> הערות: </b> {item.Note}<br />
                                 </h5>
-                          {/* <PrintR id={item.RequestingUserId}></PrintR> */}
+                                <PrintR id={item.RequestingUserId}></PrintR>
 
-                               
-                                </div>
-                                
-                            } />
-                               
+
+
+                            </div>
+
+                        } />
+
                 ))
-                  }
+                }
             </div>
 
         </div>

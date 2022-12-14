@@ -17,11 +17,14 @@ function mapStateToProps(state) {
   return {
     User: state.users.user
   }
+  
 }
 
 export default connect(mapStateToProps)(function LoadingButton(props) {
   const [isLoading, setLoading] = useState(false);
-  const { dispatch, checkFunc, request, User } = props;
+  const { dispatch, checkFunc, 
+     requestss,
+     User } = props;
   useEffect(() => {
     if (isLoading) {
       simulateNetworkRequest().then(() => {
@@ -38,7 +41,7 @@ export default connect(mapStateToProps)(function LoadingButton(props) {
     debugger
     let CurrentDate2 = new Date().toISOString().split("T")[0]
     let CurrentTime2 = new Date().toLocaleTimeString()
-    let CurrentRequest = { ...request }
+    let CurrentRequest = { ...requestss }
     CurrentRequest["CurrentDate"] = CurrentDate2;
     CurrentRequest["CurrentTime"] = CurrentTime2;
     // CurrentRequest["CityName"]=null;
@@ -59,7 +62,8 @@ export default connect(mapStateToProps)(function LoadingButton(props) {
             handleClick()
           }
 
-          navigate("/formAfterFilter", { state: { data: users } })
+          navigate("/formAfterFilter", { state: { data: users
+            ,requestss:CurrentRequest } })
         // }
 
 

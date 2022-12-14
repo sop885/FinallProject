@@ -340,7 +340,7 @@ const F = (props) => {
                 </Row>
 
                 <Row className="mb-3 input" >
-                    {image.preview && <img src={image.preview} width='100' height='100' />}
+                    {image.path && <img src={image.path} width='100' height='100' />}
                     <Form.Group onSubmit={handleSubmit} controlId="formFile" className="mb-3">
                         <Form.Label>תמונת פרופיל</Form.Label>
                         <Form.Control name="Imag" onChange={handleChange} type="file" />

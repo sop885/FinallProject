@@ -1,11 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Calendar from 'react-calendar'
-  ;
+import Calendar from 'react-calendar'  ;
 import 'react-calendar/dist/Calendar.css';
 import './date.css'
 import { connect } from 'react-redux'
 import axios from 'axios';
-
 import { allRequests } from '../../../redux/actions/requestsAction'
 
 const mapStateToProps = (state) => {
@@ -29,6 +27,20 @@ function Booking(props) {
   const [date, setDate] = useState(new Date());
   const [Datess, setDatess] = useState(new Date());
 
+
+   function getDatesInRange(startDate, endDate) {
+    const date = new Date(startDate.getTime());
+  
+    const dates = [];
+  
+    while (date <= endDate) {
+      dates.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+  
+    return dates;
+  }
+
   useEffect(() => {
     if (!(request && request.length)) {
       axios.get(`http://localhost:3000/Action/getUserActions/${user.UserId}`).then((res) => {
@@ -36,8 +48,7 @@ function Booking(props) {
       });
 
     }
-
-  }, [])
+ }, [])
   //מערך של הבקשות שהוא מחליף
   useEffect(() => {
 
@@ -47,41 +58,25 @@ function Booking(props) {
     });
     setReqs(Req)
   }, [request])
-  //חישוב הבדל מספר ימים להדגיש
-  function datediff(first, second) {
-
-   let num=  Math.round(second - first);
-   alert("datediff1"+ num)
-   num =num / (1000 * 60 * 60 * 24);
-   alert("datediff2"+ num)
-     return num
-  }
-  //להוסיף מספר ימים לתאריך ומחזיר תאריך גדול במספר הימים
-  function addDays(date, days) {
-    var result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-  }
+ 
   //בעת רינדור עוברים על מערך הבקשות ומוסיפים למערך כל התאריכים
   useEffect(() => {
     req && req.length && req.map((item, index) => {
-      // Dates.push(item.DateStart)  
-      // {item.DateEnd!=item.DateStart ? :null}
-      // alert("item.DateStart  "+ getDate( item.DateStart))
-      // alert("item.end  "+ getDate(item.DateEnd) )
+     
 
-      num = datediff(item.DateStart, item.DateEnd)
-      alert("num"+num)
-      for (let index = 0; index < num; index++) {
-        d = addDays(item.DateStart, index)
-        Dates.push(d)
-      }
+    const d1= item.DateStart;
+    const d2 = item.DateEnd
+    console.log(getDatesInRange(d1, d2));
+    Dates.push(getDatesInRange(d1, d2)) 
     })
-    alert("Dates"+Dates)
-    setDatess(Dates)
+    // alert("Dates"+Dates)
+    // setDatess(Dates)
     // Dates.map((it, index) => {
     //   setShowTime(true)
-    // })
+    // })  
+  
+  
+  
   }, [req])
 
 
@@ -106,10 +101,10 @@ function Booking(props) {
   //    if(item.DateStart==e)
   //    detail=item
   //  })} ;
-    alert("here  it's going to be the datails from"+
+    // alert("here  it's going to be the datails from"+
     // detail.DateStart+
     // "and"+ detail.AreaName+
-     getDate(e) + " until " + getDate(addDays(e, 2)))
+    //  getDate(e) + " until " + getDate(addDays(e, 2)))
   }
     const [dater, setDater] = useState([
       new Date(2022, 9, 1),
@@ -125,34 +120,12 @@ function Booking(props) {
         calendarType="Hebrew"
         locale="he"
         navigationAriaLive="polite"
-        // selectRange={true}
         navigationAriaLabel="Go up"
         maxDetail="month"
         minDetail="month"
-        // selectRange={true}
         defaultValue={dater}               
-      //   tileDisabled={({date, view}) =>
-      //   (view === 'month') && // Block day tiles only
-      //   disabledDates.some(disabledDate =>
-      //     (date.getFullYear() === disabledDate.getFullYear() &&
-      //     date.getMonth() === disabledDate.getMonth() &&
-      //     date.getDate() === disabledDate.getDate()) 
-      //   )
-      // }
-      // onClickDay={() => setShowTime(true)}
-
       />
-      {/* {date.length > 0 ? (
-   <p>
-     <span>Start:</span>{' '} {date[0].toDateString()}
-     &nbsp; to &nbsp;
-     <span>End:</span> {date[1].toDateString()}
-   </p>
-        ) : (
-   <p>
-     <span>Default selected date:</span>{' '} {date.toDateString()}
-   </p>
-        )} */}
+    
 
     </div>
   );

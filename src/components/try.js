@@ -3,44 +3,34 @@ import React, { useState } from 'react';
 // import './a.css'
 // import Accordion from './aa';
 import './try.css'
+import Calendar from 'react-calendar'
+
 
 const A = (props) => {
 
-    return (
-        // <div className="accs">
-
-        //     <div className="center" >
-        //         <Accordion  className="accordiond" >
-        //         <Accordion.Item eventKey="0" className="accordiond" >
-        //             <Accordion.Header className="accordions"  style={{textAlign:"center"}}>הבקשה אושרה בשעה 12:00 ע"י </Accordion.Header>
-        //             <Accordion.Body className="accordions" >
-        //                פרטים...
-        //             </Accordion.Body>
-        //         </Accordion.Item>              
-        //     </Accordion>
-        //     </div>            
-
-        //     <div className="center"><Accordion className="accordiond" >
-        //         <Accordion.Item eventKey="0" className="accordiond">
-        //             <Accordion.Header className="accordions">הבקשה אושרה בשעה 12:00 ע"י </Accordion.Header>
-        //             <Accordion.Body className="accordions">
-        //                פרטים...
-        //             </Accordion.Body>
-        //         </Accordion.Item>              
-        //     </Accordion></div>
-        // </div>
-        <div className='container-fluid'>
-        {/* //     <div className='row'>
-        //         <div className='col-3' style={{ backgroundColor: "green" }}>hgkjghkj</div>
-        //         <div className='col-9' style={{ backgroundColor: "blue" }}>hlkjhkjl</div>
-
-        //     </div>
-        //     <div row>
+   
+        const [date, setDate] = useState([
+          new Date(2022, 8, 1),
+          new Date(2022, 8, 15),
+        ]);
+      
+        return (
+          <div className='app'>
+            <h1 className='text-center'>React Calendar with Range</h1>
+            <div className='calendar-container'>
+              <Calendar
+                onChange={setDate}
+                // selectRange={true}
+                defaultValue={date}                                                     
+              />
+            </div>
+          </div>
+        );
+      
 
 
-        //     </div> */}
-        </div>
-    )
+
+   
 
 }
 export default A;

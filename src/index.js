@@ -19,7 +19,9 @@ import InformationForm from './components/Forms/Form.information/information'
 import HistoryForm from './components/Forms/Form.history/history'
 import ConnectForm from './components/Forms/Connect/ConnectForm'
 import { Provider } from 'react-redux'
+import FillAfter from './components/Forms/Form.FillRequest/formFillAfter'
 import store from './redux/store'
+
 
 ReactDOM.render(
   <React.StrictMode>
@@ -46,6 +48,11 @@ ReactDOM.render(
             <Route path="information" element={<InformationForm />} />
             <Route path="history" element={<HistoryForm />} />
             <Route path="ConnectForm" element={<HomePage />} />
+            <Route path="FillAfter" element={<FillAfter />} />
+
+            
+
+
 
 
             {/* <Route path="" element={<HomePage />} /> */}

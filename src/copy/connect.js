@@ -20,25 +20,15 @@ export default connect()(function Login(props) {
     const [modalShow, setModalShow] = useState(true);
 
     const name = useRef('');
-    const pass = useRef('');
-    function onFormSubmit (e) {
-        e.preventDefault();
-        alert("submit")
-    }
+    const pass = useRef('')
 debugger
     async function close() {
-        // onFormSubmit()
+        
         await onHide(false)
         await setModalShow(false)
         await navigate("/signup")
 
 
-    }
-    function checkey(e){
-        
-        if (e.charCode === 13) {
-            checkIfValid();
-          }
     }
     // function open() {
     //     setModalShow(false)
@@ -103,23 +93,23 @@ debugger
     }
     // closeButton
     return (
-        < >
+        <>
             <Modal keyboard="false" backdrop="static" {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
-                <Modal.Header  >
+                <Modal.Header >
                     <Modal.Title id="contained-modal-title-vcenter" >
                         <img src={p1} className="psize" ></img>
                     </Modal.Title>
 
                 </Modal.Header >
                 <hr style={{ color: "lightblue", marginTop: "0%", height: "2px" }}></hr>
-                <Modal.Body onKeyPress={checkey} >
+                <Modal.Body >
                     <h3 className="titlt">Switch-ברוכים הבאים ל</h3>
                     <h5 className="titlt">אתר המשרת את עובדי ההוראה בישראל בניהול מילואי מקום</h5>
 
 
                     <h6 className="connecting" ><b>להתחברות:</b></h6>
 
-                    <Form  className="connecting" >
+                    <Form className="connecting">
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="">
                                 <Form.Label style={{ color: "black" }}>הכנס שם משתמש:</Form.Label>
@@ -138,11 +128,11 @@ debugger
 
                 </Modal.Body>
                 {/* <Modal.Footer> */}
-                <Button onClick={checkIfValid}  className="button" style={{ width: "10%", }}><b> כניסה</b></Button>
+                <Button onClick={checkIfValid} className="button" style={{ width: "10%", }}><b> כניסה</b></Button>
                 {/* </Modal.Footer>  */}
                 <br />
                 <div ><h5 className="right" >?עוד לא חבר<br /><u style={{ color: "rgba(13, 88, 252, 0.822)" }}>
-                    <Button className="b" type="submit"  onClick={()=>close()} ><u>הירשם כאן</u></Button>
+                    <Button className="b" onClick={close} ><u>הירשם כאן</u></Button>
                 </u></h5></div>
 
             </Modal>

@@ -76,8 +76,10 @@ const A = (props) => {
                         {/* {item.status != true ? setFlag(false):''} */}
                         {item.status != true ?
                             <Accordion className="t" style={{ backgroundColor: "green" }}
-                                key={index} title={<div><img src={user.Imag} className="imgaco" />
-                                    <b>{user.UserName}|{always1}  {item.CurrentDate} | {always2}  {item.CurrentTime}</b></div>}
+                                key={index} title={<div>
+                                    {/* <img src={user.Imag===undefined&&user.Imag.path==''?P:`http://localhost:3000/${user.Imag.path}`} className="imgaco" /> */}
+                                    <b>{user.UserName}|{always1}  {item.CurrentDate} | {always2}  {item.CurrentTime}</b>
+                                    </div>}
                                 content={
                                     <div>
                                         <h4>פרטי הבקשה</h4>

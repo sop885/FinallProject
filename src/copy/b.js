@@ -96,7 +96,9 @@ const B = (props) => {
                 {req && req.length ? req.map((item, index) => (
                     <>
                     {item.status == true ?
-                        <Accordion className="t" style={{backgroundColor:"green"}} key={index} title={<div><img src={user.Imag} className="imgaco"  /><b>{always1}{item.CurrentDate} | {always2}  {item.CurrentTime}</b></div>}
+                        <Accordion className="t" 
+                         key={index} title={<div><img src={user.Imag} className="imgaco"  />
+                         <b style={{color:"green"}}>{always1}{item.CurrentDate} | {always2}  {item.CurrentTime}</b></div>}
                             content={
                             <div>
                                     <h4>פרטי הבקשה</h4>
@@ -113,8 +115,8 @@ const B = (props) => {
                                         <b> הערות: </b> {item.Note}<br />
                                         <b style={{ color: "Green" }}>סטטוס: בקשתך אושרה</b><br />
 
-                                        <Print id={item.ReplacesUserId}></Print>
-                                    </h5>
+                                        </h5>
+                                    <Print id={item.ReplacesUserId}></Print>
                                     
                                     {/* {item.status == true && item.ReplacesUserId != "" && item.ReplacesUserId != null ?
                                 } */}
@@ -143,7 +145,7 @@ const B = (props) => {
 
 
                         />:
-                        <Accordion className="f" key={index} title={<div><img src={user.Imag} className="imgaco"   /><b>{always1}{item.CurrentDate} | {always2}  {item.CurrentTime}</b></div>}
+                        <Accordion className="f" key={index} title={<div><img src={user.Imag} className="imgaco"   /><b style={{color:"red"}}>{always1}{item.CurrentDate} | {always2}  {item.CurrentTime}</b></div>}
                         content={
                         <div>
                                 <h4>פרטי הבקשה</h4>
