@@ -5,6 +5,8 @@ import Messageb from '../../helpcomponents/accordion/abirthday'
 import { connect } from 'react-redux'
 import { allRequests } from '../../../redux/actions/requestsAction'
 import axios from 'axios';
+import Calendar from 'react-calendar';
+
 import './formMessages.css'
 
 
@@ -54,6 +56,25 @@ const MessageForm =connect(mapStateToProps)( (props) => {
 
 
     return (
+<div>
+        <div style={{
+            position: "fixed",
+            width: "30%",
+            height: "30%",
+            left: 0,
+            bottom: "160px"
+        }}>
+            <Calendar
+                className="calender"
+                value={new Date()}
+                calendarType="Hebrew"
+                locale="he"
+                navigationAriaLive="polite"
+                navigationAriaLabel="Go up"
+                maxDetail="month"
+                minDetail="month"
+
+            /></div>
         <div style={{ marginRight: "15%" }} className="myformm">
             <br /> <h2 style={{ textAlign: "center", fontSize: "20px", textShadow: "gray 0 1px 2px" }}> הודעות</h2>          
             {isBd(user.BirthDate) == true ? <Messageb></Messageb> : 
@@ -63,7 +84,7 @@ const MessageForm =connect(mapStateToProps)( (props) => {
 
 
 
-        </div>
+        </div></div>
     )
 })
 export default MessageForm;

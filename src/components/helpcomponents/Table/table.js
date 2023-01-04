@@ -74,7 +74,7 @@ const Tablet = (props) => {
             <Table striped bordered hover className="tableFilter">
                 <thead>
                     <tr className="head">
-                        <th>userID</th>
+                        {/* <th>userID</th> */}
                         <th>מין</th>
                         <th>תעודת הוראה</th>                        
                         <th>גיל</th>
@@ -89,7 +89,7 @@ const Tablet = (props) => {
                 <tbody>
                     {users && users.length && users.map((item, index) =>
                         <tr key={index}>
-                            <td>{item.UserId}</td> 
+                            {/* <td>{item.UserId}</td>  */}
                             <td>{item.Gender}</td>                            
                             <td>{item.Diploma}</td>
                             <td>{getAge(item.BirthDate)}</td>

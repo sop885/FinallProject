@@ -329,8 +329,8 @@ const S = (props) => {
 
             }
             else {
-                Object.keys(user).map(key=>
-                   formData.append( key, user[key]) 
+                Object.keys(user).map(key =>
+                    formData.append(key, user[key])
                 )
 
                 axios.post("http://localhost:3000/User/createUser", formData).then((res) => {
@@ -658,7 +658,9 @@ const S = (props) => {
                                     <Form.Group as={Col} controlId="formGridEmail">
                                         <Form.Label className="lable">תאריך לידה</Form.Label>
                                         <span className="span">{errorMessage.bbirthdate}</span>
-                                        <Form.Control name="BirthDate" onChange={handleChange} type="date" formAction='dd/mm/yyyy' placeholder="הכנס תאריך לידה" max={new Date().toISOString().split("T")[0]} />
+                                        <Form.Control name="BirthDate" onChange={handleChange} type="date" formAction='dd/mm/yyyy' placeholder="הכנס תאריך לידה"
+                                         max={new Date().toISOString().split("T")[0]} 
+                                        min={new Date(new Date().setFullYear(new Date().getFullYear() - 100)).toISOString().split("T")[0]} />
 
 
                                     </Form.Group>
@@ -773,7 +775,6 @@ const S = (props) => {
 
                                 {/* {area.current.value ? area.current.value : ""} */}
 
-
                                 <Row className="mb-3 input" dir="rtl">
                                     <Form.Group as={Col} controlId="formGridState">
                                         <Form.Label className="lable">דרכי ההתקשרות </Form.Label>
@@ -815,9 +816,9 @@ const S = (props) => {
                                     </Form.Group>
                                 </Row>
 
-                                <Row className="mb-3 input" dir="rtl" >
+                                {/* <Row className="mb-3 input" dir="rtl" >
                                     <Form.Label className="lable">*לא חובה</Form.Label>
-                                </Row>
+                                </Row> */}
 
 
 

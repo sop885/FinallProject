@@ -68,7 +68,7 @@ debugger
         )
     }
     function click(data) {
-        //לשמור את היוזר בתוך הסטור
+        //לשמור את המשתמש בתוך הסטור
         let requests = []
         dispatch(createUser(data));
         //   dispatch(updateUser(data.data));

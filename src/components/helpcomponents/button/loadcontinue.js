@@ -17,14 +17,14 @@ function mapStateToProps(state) {
   return {
     User: state.users.user
   }
-  
+
 }
 
 export default connect(mapStateToProps)(function LoadingButton(props) {
   const [isLoading, setLoading] = useState(false);
-  const { dispatch, checkFunc, 
-     requestss,
-     User } = props;
+  const { dispatch, checkFunc,
+    requestss,
+    User } = props;
   useEffect(() => {
     if (isLoading) {
       simulateNetworkRequest().then(() => {
@@ -58,12 +58,16 @@ export default connect(mapStateToProps)(function LoadingButton(props) {
         // if (users === null)
         //   alert("לא נמצאו מחליפים הזמינים לבקשתך ):")
         // else {
-          if (!isLoading) {
-            handleClick()
-          }
+        if (!isLoading) {
+          handleClick()
+        }
 
-          navigate("/formAfterFilter", { state: { data: users
-            ,requestss:CurrentRequest } })
+        navigate("/formAfterFilter", {
+          state: {
+            users
+            , requestss: CurrentRequest
+          }
+        })
         // }
 
 

@@ -21,6 +21,7 @@ const mapStateToProps = (state) => {
 
 const A = (props) => {
     const { request, user } = props
+    console.log(request);
     const [isActive, setIsActive] = useState(false);
     const always1 = "  הבקשה התקבלה בתאריך"
     const always2 = "  בשעה"
@@ -30,7 +31,7 @@ const A = (props) => {
     useEffect(async () => {
         debugger
         request && request.length && request.map(async (item, index) => {
-            if (item.RequestingUserId != user.UserId) { await Req.push(item) }
+            if (item.RequestingUserId !== user.UserId && item.status !== true) { await Req.push(item) }
 
         });
         await setReq(Req)
@@ -66,7 +67,7 @@ const A = (props) => {
     }
 
     const [flag, setFlag] = useState(true);
-
+    console.log(req);
     return (
         <div>
             <div className="accordion" dir="rtl">
@@ -74,36 +75,36 @@ const A = (props) => {
                 {req && req.length ? req.map((item, index) =>
                     <>
                         {/* {item.status != true ? setFlag(false):''} */}
-                        {item.status != true ?
-                            <Accordion className="t" style={{ backgroundColor: "green" }}
-                                key={index} title={<div>
-                                    {/* <img src={user.Imag===undefined&&user.Imag.path==''?P:`http://localhost:3000/${user.Imag.path}`} className="imgaco" /> */}
-                                    <b>{user.UserName}|{always1}  {item.CurrentDate} | {always2}  {item.CurrentTime}</b>
-                                    </div>}
-                                content={
-                                    <div>
-                                        <h4>פרטי הבקשה</h4>
-                                        <h5 className="contantb">
-                                            <b>מתאריך:</b>  {getDate(item.DateStart)}<br />
-                                            <b>עד תאריך:</b> {getDate(item.DateEnd)} <br />
-                                            <b> התפקיד הנדרש:</b> {item.Job}<br />
-                                            <b> שכבת גיל:</b> {item.AgeGroup}<br />
-                                            <b>הרכב המגזר:</b>  {item.GenderPlace}<br />
-                                            <b>אזור מוסד:</b>  {item.AreaName}<br />
-                                            <b>עיר:</b> {item.CityName}<br></br>
-                                            <b> כתובת:</b> {item.Adress}<br />
-                                            <b> שכר שעתי ממוצע:</b> {item.Rate}<br />
-                                            <b> הערות: </b> {item.Note}<br />
-                                        </h5>
-                                       
-                                        <PrintR id={item.RequestingUserId}></PrintR>
+                        {/* {item.status != true ? */}
+                        <Accordion className="t" style={{ backgroundColor: "green" }}
+                            key={index} title={<div>
+                                {/* <img src={user.Imag===undefined&&user.Imag.path==''?P:`http://localhost:3000/${user.Imag.path}`} className="imgaco" /> */}
+                                <b>{user.UserName}|{always1}  {item.CurrentDate} | {always2}  {item.CurrentTime}</b>
+                            </div>}
+                            content={
+                                <div>
+                                    <h4>פרטי הבקשה</h4>
+                                    <h5 className="contantb">
+                                        <b>מתאריך:</b>  {getDate(item.DateStart)}<br />
+                                        <b>עד תאריך:</b> {getDate(item.DateEnd)} <br />
+                                        <b> התפקיד הנדרש:</b> {item.Job}<br />
+                                        <b> שכבת גיל:</b> {item.AgeGroup}<br />
+                                        <b>הרכב המגזר:</b>  {item.GenderPlace}<br />
+                                        <b>אזור מוסד:</b>  {item.AreaName}<br />
+                                        <b>עיר:</b> {item.CityName}<br></br>
+                                        <b> כתובת:</b> {item.Adress}<br />
+                                        <b> שכר שעתי ממוצע:</b> {item.Rate}<br />
+                                        <b> הערות: </b> {item.Note}<br />
+                                    </h5>
 
-                                        
-                                        <br></br>
-                                        {item.status == true ? 'confirmed' : <Confirmb item={item} />}
-                                    </div>}
-                            />
-                            : ''}
+                                    <PrintR id={item.RequestingUserId}></PrintR>
+
+
+                                    <br></br>
+                                    {item.status == true ? 'confirmed' : <Confirmb item={item} />}
+                                </div>}
+                        />
+                        {/* : ''} */}
 
                     </>
                 )

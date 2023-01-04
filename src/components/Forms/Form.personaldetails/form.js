@@ -12,6 +12,7 @@ import { updateUser } from '../../../redux/actions/userActions';
 import { connect, useSelector } from "react-redux"
 import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from 'react-router-dom'
+import P from '../../img/profile.jpg'
 
 // import Date from './Date/date'
 
@@ -35,7 +36,7 @@ export default connect(mapStateToProps)(function F(props) {
     }, [currentUser])
     let navigate = useNavigate()
 
-
+    console.log('lll', user);
     // let FullName = useRef()
     // let area = useRef()
     // let mail = useRef()
@@ -70,18 +71,30 @@ export default connect(mapStateToProps)(function F(props) {
     const [areaSelected, setAreaSelected] = useState("מרכז")
     const [cities, setCities] = useState([{ cityId: 1, cityName: "אלעד", areaName: "מרכז" }, { cityId: 2, cityName: "רכסים", areaName: "צפון" }, { cityId: 3, cityName: "אשדוד", areaName: "דרום" }])
     const [areas, setAreas] = useState([{ areaId: 1, areaName: "מרכז" }, { areaId: 2, areaName: "דרום" }, { areaId: 3, areaName: "צפון" }])
-    const [isLoading, setLoading] = useState(false);
+    const [isLoadingSave, setLoadingSave] = useState(false);
+    const [isLoadingDelete, setLoadingDelete] = useState(false);
+
     const [checkAll, setCheckAll] = useState(false)
     const { dispatch } = props
     useEffect(() => {
 
-        if (isLoading) {
+        if (isLoadingSave) {
             simulateNetworkRequest().then(() => {
-                setLoading(false);
+                setLoadingSave(false);
             });
         }
 
-    }, [isLoading]);
+    }, [isLoadingSave]);
+
+    useEffect(() => {
+
+        if (isLoadingDelete) {
+            simulateNetworkRequest().then(() => {
+                setLoadingDelete(false);
+            });
+        }
+
+    }, [isLoadingDelete]);
 
     useEffect(() => {
         debugger
@@ -92,6 +105,11 @@ export default connect(mapStateToProps)(function F(props) {
 
     }, [])
 
+    useEffect(() => {
+        axios.get(`http://localhost:3000/City/getCitiesByArea/${user.AreaCode}`).then((res) =>
+            setCityList(res.data)
+        )
+    }, [])
 
 
 
@@ -147,15 +165,15 @@ export default connect(mapStateToProps)(function F(props) {
 
     function DeleteUser() {
         let UserId = user.UserId
-
+        if (!isLoadingDelete) {
+            handleClickDelete()
+        }
 
         axios.delete(`http://localhost:3000/User/deleteUser/${UserId}`).then((res) => {
             console.log(res.data)
             // לשלוח לשמירה בסטור
             dispatch(updateUser({}))
-            if (!isLoading) {
-                handleClick()
-            }
+
             navigate("/signup")
 
             //  currentUser={user}
@@ -170,7 +188,9 @@ export default connect(mapStateToProps)(function F(props) {
 
 
     function updateUsers() {
-        debugger
+        if (!isLoadingSave) {
+            handleClickSave()
+        }
         // בדיקות תקינות - א"א ללכת בלי לגמור למלא הכל.
         // if (user.Password != user.ValidatePass)
         //     alert(" !הסיסמאות לא תואמות, אנא אמת סיסמא שוב")
@@ -218,19 +238,17 @@ export default connect(mapStateToProps)(function F(props) {
                                                                                 console.log(data.data)
 
                                                                                 dispatch(updateUser(data.data))
-                                                                                if (!isLoading) {
-                                                                                    handleClick()
-                                                                                }
+
                                                                             })
 
-
+                                                                            alert("השינויים נשמרו בהצלחה!")
 
                                                                             //  currentUser={user}
                                                                             // setUser(currentUser)
 
                                                                         })
 
-                                                                        alert("השינויים נשמרו בהצלחה!")
+
                                                                         return true;
 
                                                                     }
@@ -246,14 +264,16 @@ export default connect(mapStateToProps)(function F(props) {
     }
 
 
-    const handleClick = () => setLoading(true);
+    const handleClickSave = () => setLoadingSave(true);
+    const handleClickDelete = () => setLoadingDelete(true);
+
     function saveArea(e) {
         console.log(e.currentTarget.selectedIndex);
 
         setAreaSelected(e.target.value)
         handleChange(e.target.name)
         setUser({ ...user, [e.target.name]: e.currentTarget.selectedIndex })
-        user[e.target.name] = e.currentTarget.selectedIndex
+        // user[e.target.name] = e.currentTarget.selectedIndex
         axios.get(`http://localhost:3000/City/getCitiesByArea/${e.currentTarget.selectedIndex}`).then((res) => {
             console.log(res);
             setCityList(res.data)
@@ -581,7 +601,9 @@ export default connect(mapStateToProps)(function F(props) {
                     <Form.Group as={Col} controlId="formGridEmail">
                         <Form.Label className="lable">תאריך לידה</Form.Label>
                         <span className="span">{errorMessage.bbirthdate}</span>
-                        <Form.Control value={user.BirthDate} name="BirthDate" onChange={handleChange} type="date" formAction='dd/mm/yyyy' placeholder="הכנס תאריך לידה" max={new Date().toISOString().split("T")[0]} />
+                        <Form.Control value={user.BirthDate && new Date(user.BirthDate)?.toISOString().split("T")[0]} name="BirthDate" onChange={handleChange} type="date" formAction='dd/mm/yyyy' placeholder="הכנס תאריך לידה"
+                         max={new Date().toISOString().split("T")[0]} 
+                         min={new Date(new Date().setFullYear(new Date().getFullYear() - 100)).toISOString().split("T")[0]}/>
 
 
                     </Form.Group>
@@ -709,9 +731,24 @@ export default connect(mapStateToProps)(function F(props) {
                         </Form.Select>
                     </Form.Group>
                 </Row>
+                {/* <Row className="mb-3 input" >
+                <img src={user.Imag===undefined||user.Imag?.path==''?P:`http://localhost:3000/${user.Imag.path}`} className="imgaco" />
 
+                    {file && <img src={file} width='100' height='100' />}
+                    <Form.Group controlId="formFile" className="mb-3">
+                        <Form.Label className="lable">תמונת פרופיל</Form.Label>
+                        {file == undefined && currentUser.Imag !== undefined && currentUser.Imag.path !== '' ? <>
+                            <Form.Control name="Imag" onChange={handleChange} type="file"/>
+                        </>
+                            : <Form.Control name="Imag" onChange={handleChange} type="file" />
+                        }
+
+                    </Form.Group>
+                    </Row> */}
                 <Row className="mb-3 input" >
-                    {/* {file && <img src={file.path} width='100' height='100' />} */}
+                    {/* <img src={user.Imag===undefined||user.Imag?.path==''?P:`http://localhost:3000/${user.Imag.path}`} className="imgaco" /> */}
+
+                    {/* {file && <img src={file.name} width='100' height='100' />} */}
                     <Form.Group controlId="formFile" className="mb-3">
                         <Form.Label className="lable">תמונת פרופיל</Form.Label>
                         {file == undefined && currentUser.Imag !== undefined && currentUser.Imag.path !== '' ? <>
@@ -722,7 +759,6 @@ export default connect(mapStateToProps)(function F(props) {
 
                     </Form.Group>
                 </Row>
-
                 <Row className="mb-3 input" dir="rtl">
                     <Form.Group as={Col} controlId="formGridPassword">
                         <Form.Label className="lable">סיסמה</Form.Label>
@@ -762,19 +798,19 @@ export default connect(mapStateToProps)(function F(props) {
                 <Row className="mb-3 input" style={{ marginRight: "45%", marginBottom: "5%", width: "10%", display: "inline-block" }} >
                     <Button
                         variant="primary"
-                        disabled={isLoading}
+                        disabled={isLoadingSave}
                         onClick={updateUsers}
                     >
-                        {isLoading ? 'Loading…' : 'שמור '}
+                        {isLoadingSave ? 'Loading…' : 'שמור '}
                     </Button>
                 </Row>
                 <Row className="mb-3 input" style={{ marginRight: "45%", marginBottom: "5%", width: "10%", display: "inline-block" }} >
                     <Button
                         variant="primary"
-                        disabled={isLoading}
+                        disabled={isLoadingDelete}
                         onClick={handleShow}
                     >
-                        {isLoading ? 'Loading…' : 'למחיקת המשתמש '}
+                        {isLoadingDelete ? 'Loading…' : 'למחיקת המשתמש '}
                     </Button>
                 </Row>
                 {/*  */}

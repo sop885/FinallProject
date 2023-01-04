@@ -150,6 +150,7 @@ function Booking(props) {
         maxDetail="month"
         minDetail="month"
         defaultValue={dater}
+        
       />
 
 
